@@ -538,7 +538,7 @@ def main(page: ft.Page):
         ft.SafeArea(
             ft.Container(
                 container_login,
-                alignment=ft.alignment.CENTER,
+                alignment=ft.alignment.center,
             ),
             expand=True,
         )
