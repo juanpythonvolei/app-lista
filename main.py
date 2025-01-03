@@ -82,7 +82,7 @@ def main(page: ft.Page):
     def apagar_lista(e):
         global item_lista
         if senha_cancelamento.value == '1020':
-            response = requests.delete(f"{link}//new/lista/",data={"lista_relacionada":f'{item_lista['quando']}'}) 
+            response = requests.delete(f"{link}//new/lista/",data={"lista_relacionada":f'{tentativa}'}) 
             if response.status_code == 200:
                 banner_cancelamento = ft.Banner(
                     bgcolor=ft.Colors.GREEN,
@@ -203,6 +203,8 @@ def main(page: ft.Page):
                 for i,item in enumerate(response.json()):
                     global item_lista
                     item_lista = item
+                    global tentativa
+                    tentativa = item['quando']
                     global total_participantes
                     total_participantes = requests.get(f"{link}/lista/ativa/totalparticipantes/",data={"lista_relacionada":item['quando']})
                     page.add(
