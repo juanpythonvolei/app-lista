@@ -80,6 +80,7 @@ def main(page: ft.Page):
             page.open(dlg)
             page.update()   
     def apagar_lista(e):
+        global item_lista
         if senha_cancelamento.value == '1020':
             response = requests.delete(f"{link}//new/lista/",data={"lista_relacionada":f'{item_lista['quando']}'}) 
             if response.status_code == 200:
