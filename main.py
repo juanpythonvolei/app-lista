@@ -4,7 +4,7 @@ import datetime
 
 def main(page: ft.Page):
     page.bgcolor = ft.colors.BLACK45
-    link = 'https://api-production-7a20.up.railway.app/'
+    link = 'https://web-production-9df03.up.railway.app/'
     def alterar(e):
         global valor
         if valor == 'qtd_participantes':
