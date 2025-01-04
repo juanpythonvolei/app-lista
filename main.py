@@ -3,7 +3,7 @@ import requests
 import datetime
 
 def main(page: ft.Page):
-    page.bgcolor = ft.colors.BLACK45
+    page.bgcolor = ft.colors.BLACK
     link = 'https://api-production-0138.up.railway.app/'
     def alterar(e):
         global valor
