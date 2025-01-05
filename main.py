@@ -605,9 +605,20 @@ def main(page: ft.Page):
                 page.bottom_appbar = barra_navegacao
                 page.update()
         else:
-            page.add(
-                ft.Text("erro")
-            )
+            banner_erro_logar_usuario = ft.Banner(
+            bgcolor=ft.Colors.RED,
+            leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+            content=ft.Text(
+                value=f"Erro. Usuário ou senha incorretos",
+                color=ft.Colors.BLACK,
+                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
+            ),
+            actions=[   
+                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=lambda e:page.close(banner_erro_logar_usuario)),
+            ],
+        ) 
+            page.open(banner_erro_logar_usuario)
+            page.update()
                 
         
     def criar_usuario(e):
