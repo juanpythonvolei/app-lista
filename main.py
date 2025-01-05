@@ -3,8 +3,136 @@ import requests
 import datetime
 
 def main(page: ft.Page):
-    page.bgcolor = ft.colors.BLACK
+    page.bgcolor = ft.colors.BLACK45
     link = 'https://api-production-0138.up.railway.app/'
+    def apagar_perfil(e):
+        if int(senha_apagar_perfil.value) == int(senha.value):
+            response = requests.delete(f'{link}/usuario/manipular/{login.value}/')
+            if response.status_code == 202:
+                    banner_alteracao_perfil = ft.Banner(
+                        bgcolor=ft.Colors.GREEN,
+                        leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
+                        content=ft.Text(
+                            value="Sucesso. Perfil excluido",
+                            color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
+                        ),
+                        actions=[
+                            ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                        ],
+                    )
+                    page.open(banner_alteracao_perfil)
+                    page.clean()
+                    voltar()
+            else:
+                    banner_alteracao_perfil = ft.Banner(
+                        bgcolor=ft.Colors.RED,
+                        leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
+                        content=ft.Text(
+                            value="Erro",
+                            color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
+                        ),
+                        actions=[
+                            ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                        ],
+                    )
+                    page.open(banner_alteracao_perfil)
+                    page.update()
+        else:
+                    banner_alteracao_perfil = ft.Banner(
+                        bgcolor=ft.Colors.RED,
+                        leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
+                        content=ft.Text(
+                            value="Erro Senha incorreta",
+                            color=ft.Colors.BLACK,
+                            weight=ft.FontWeight.BOLD,size=20
+                        ),
+                        actions=[
+                            ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                        ],
+                    )
+                    page.open(banner_alteracao_perfil)
+                    page.update()
+    def dialog_apagar_perfil(e):
+        global senha_apagar_perfil
+        senha_apagar_perfil = ft.TextField(label="Insira a sua senha",password=True,label_style=ft.TextStyle(color=ft.colors.WHITE), 
+            text_style=ft.TextStyle(color=ft.colors.WHITE), 
+            border_color=ft.colors.WHITE,
+            icon=ft.icons.PASSWORD)
+        dlg = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("Insira a senha para Apagar o seu perfil",weight=ft.FontWeight.BOLD,size=20),
+                on_dismiss=lambda e: page.close(dlg),
+                actions=[ft.Column(
+                     alignment=ft.alignment.center,
+                     controls=[
+                          senha_apagar_perfil,
+                          ft.Row(
+                               alignment=ft.alignment.center,
+                               controls=[
+                                    ft.FloatingActionButton(icon=ft.icons.DELETE_SHARP,width=80,on_click=apagar_perfil),
+                                    ft.FloatingActionButton(icon=ft.icons.CLOSE_OUTLINED,width=80,on_click=lambda e:page.close(dlg))
+                               ]
+                               
+                          )
+                     ]
+                )]
+                )
+        page.open(dlg)
+    def alterar_perfil(e):
+        response = requests.put(f'{link}/usuario/manipular/{login.value}/',data={"senha":int(nova_senha_perfil.value),"nome_site":login.value})
+        if response.status_code == 202:
+                banner_alteracao_perfil = ft.Banner(
+                    bgcolor=ft.Colors.GREEN,
+                    leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
+                    content=ft.Text(
+                        value="Sucesso a alteração foi realizada",
+                        color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
+                    ),
+                    actions=[
+                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                    ],
+                )
+                page.open(banner_alteracao_perfil)
+                page.update()
+        else:
+                banner_alteracao_perfil = ft.Banner(
+                    bgcolor=ft.Colors.RED,
+                    leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
+                    content=ft.Text(
+                        value="Erro",
+                        color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
+                    ),
+                    actions=[
+                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                    ],
+                )
+                page.open(banner_alteracao_perfil)
+                page.update()
+    def page_alterar_perfil(e):
+        page.clean()
+        global nova_senha_perfil
+        nova_senha_perfil = ft.TextField(label="Insira sua nova senha",password=True,label_style=ft.TextStyle(color=ft.colors.WHITE), 
+            text_style=ft.TextStyle(color=ft.colors.WHITE), 
+            border_color=ft.colors.WHITE,
+            icon=ft.icons.PASSWORD)
+        informacoes = ft.Container(
+            alignment=ft.alignment.center,
+            bgcolor=ft.colors.LIGHT_BLUE,
+            border_radius=15,
+            padding=10,
+            content=ft.Column(
+                alignment=ft.alignment.center,
+                controls=[
+                    ft.Text('Altere sua senha',weight=ft.FontWeight.BOLD,size=20),
+                    ft.Column(
+                        controls=[nova_senha_perfil,ft.FloatingActionButton("Alterar Perfil",icon=ft.Icons.VERIFIED,bgcolor=ft.colors.GREEN,on_click=alterar_perfil)]
+                    ),
+                    ft.FloatingActionButton('Apagar Perfil',icon=ft.Icons.DELETE,bgcolor=ft.colors.RED,on_click=dialog_apagar_perfil)
+                ]
+            )
+        )
+        page.add(informacoes)
+        page.update()
     def alterar(e):
         global valor
         if valor == 'qtd_participantes':
@@ -18,10 +146,10 @@ def main(page: ft.Page):
                     leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
                     content=ft.Text(
                         value="Sucesso a alteração foi realizada",
-                        color=ft.Colors.BLACK,
+                        color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar", style=action_button_style, on_click=lambda e:page.close(banner_alteracao)),
+                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao)),
                     ],
                 )
                 page.open(banner_alteracao)
@@ -32,29 +160,32 @@ def main(page: ft.Page):
                     leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
                     content=ft.Text(
                         value="Houve um erro na alteração",
-                        color=ft.Colors.BLACK,
+                        color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar", style=action_button_style, on_click=lambda e:page.close(banner_alteracao)),
+                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao)),
                     ],
                 )
                 page.open(banner_alteracao)
                 page.update()
     def alterar_lista_dialog(e):
         global valor
-        valor = ft.TextField(label="Insira o novo Valor")
+        valor = ft.TextField(label="Insira o novo Valor",label_style=ft.TextStyle(color=ft.colors.WHITE), 
+            text_style=ft.TextStyle(color=ft.colors.WHITE), 
+            border_color=ft.colors.WHITE,
+            icon=ft.icons.INFO_ROUNDED)
         global cg
         cg = ft.RadioGroup(content=ft.Column([
             ft.Radio(value="qtd_participantes", label="Participantes"),
             ft.Radio(value="local", label="Local")]))
         dlg = ft.AlertDialog(modal=True,
-                title=ft.Text(f"Participantes"),
+                title=ft.Text(f"Participantes",weight=ft.FontWeight.BOLD,size=15),
                 content=ft.Column(
                      controls=[ cg,
                                valor,ft.Row(
                                     controls=[
-                                        ft.FloatingActionButton("Alterar",on_click=alterar),
-                                        ft.FloatingActionButton("Fechar",on_click=lambda e:page.close(dlg))
+                                        ft.FloatingActionButton("Alterar",on_click=alterar,icon=ft.icons.CHANGE_HISTORY)   ,
+                                        ft.FloatingActionButton(icon=ft.icons.CLOSE_FULLSCREEN,on_click=lambda e:page.close(dlg))
                                     ]
                                ),]
                     
@@ -72,17 +203,16 @@ def main(page: ft.Page):
                  nome = participante
                  texto += f'{nome}\n'
             dlg = ft.AlertDialog(
-                title=ft.Text(f"Participantes"),
-                content=ft.Text(f"{texto}"),
+                title=ft.Text(f"Participantes",weight=ft.FontWeight.BOLD,size=20),
+                content=ft.Text(f"{texto}",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 )
                      
             page.open(dlg)
             page.update()   
     def apagar_lista(e):
-        global item_lista
         if senha_cancelamento.value == '1020':
-            response = requests.delete(f"{link}//new/lista/",data={"lista_relacionada":f'{tentativa}'}) 
+            response = requests.delete(f"{link}//new/lista/",data={"lista_relacionada":f'{str(item_lista['quando'])}'}) 
             if response.status_code == 200:
                 banner_cancelamento = ft.Banner(
                     bgcolor=ft.Colors.GREEN,
@@ -90,9 +220,10 @@ def main(page: ft.Page):
                     content=ft.Text(
                         value="Sucesso a lista foi cancelada",
                         color=ft.Colors.BLACK,
+                        weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar", style=action_button_style, on_click=lambda e:page.close(banner_cancelamento)),
+                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_cancelamento)),
                     ],
                 )
                 page.open(banner_cancelamento)
@@ -104,9 +235,10 @@ def main(page: ft.Page):
                     content=ft.Text(
                         value="Senha incorreta",
                         color=ft.Colors.BLACK,
+                        weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar", style=action_button_style, on_click=lambda e:page.close(banner_cancelamento)),
+                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_cancelamento)),
                     ],
                 )
                  page.open(banner_cancelamento)
@@ -114,10 +246,13 @@ def main(page: ft.Page):
                  
     def apagar_lista_dialog(e):
         global senha_cancelamento
-        senha_cancelamento = ft.TextField(label="Insira a senha de administrador",password=True)
+        senha_cancelamento = ft.TextField(label="Insira a senha de administrador",password=True,label_style=ft.TextStyle(color=ft.colors.WHITE), 
+            text_style=ft.TextStyle(color=ft.colors.WHITE), 
+            border_color=ft.colors.WHITE,
+            icon=ft.icons.PASSWORD_ROUNDED)
         dlg = ft.AlertDialog(
                 modal=True,
-                title=ft.Text("Insira a senha para Apagar a lista"),
+                title=ft.Text("Insira a senha",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 actions=[ft.Column(
                      alignment=ft.alignment.center,
@@ -126,8 +261,8 @@ def main(page: ft.Page):
                           ft.Row(
                                alignment=ft.alignment.center,
                                controls=[
-                                    ft.FloatingActionButton("Apagar lista",width=80,on_click=apagar_lista),
-                                    ft.FloatingActionButton("fechar",width=80,on_click=lambda e:page.close(dlg))
+                                    ft.FloatingActionButton(icon=ft.icons.DELETE_FOREVER_ROUNDED,width=80,on_click=apagar_lista),
+                                    ft.FloatingActionButton(icon=ft.icons.CLOSE_ROUNDED,width=80,on_click=lambda e:page.close(dlg))
                                ]
                                
                           )
@@ -144,14 +279,14 @@ def main(page: ft.Page):
         response = requests.delete(f"{link}/listas/participacao/",data={"lista_relacionada":item_lista['quando'],"participante":login.value})
         if response.status_code == 200:
                 dlg = ft.AlertDialog(
-                title=ft.Text("Sucesso. Seu nome foi retirado da lista"),
+                title=ft.Text("Sucesso. Seu nome foi retirado da lista",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 )
                 page.open(dlg)
                 page.update()
         else:
                 dlg = ft.AlertDialog(
-                title=ft.Text("Houve um erro"),
+                title=ft.Text("Houve um erro",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 )
                 page.open(dlg)
@@ -164,28 +299,28 @@ def main(page: ft.Page):
         if int(total_participantes.json()['total']) < int(str(item_lista['qtd_participantes'])):
             if response.status_code == 200:
                 dlg = ft.AlertDialog(
-                title=ft.Text("Sucesso. Agora Você está participando da lista"),
+                title=ft.Text("Sucesso. Agora Você está participando da lista",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 )
                 page.open(dlg)
                 page.update()
             elif response.status_code == 400:
                 dlg = ft.AlertDialog(
-                title=ft.Text("Erro. Você já está participando da lista"),
+                title=ft.Text("Erro. Você já está participando da lista",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 )
                 page.open(dlg)
                 page.update()
             else:
                 dlg = ft.AlertDialog(
-                title=ft.Text("Houve um erro"),
+                title=ft.Text("Houve um erro",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 )
                 page.open(dlg)
                 page.update()
         else:
             dlg = ft.AlertDialog(
-                title=ft.Text("Número máximo de participantes atingido"),
+                title=ft.Text("Número máximo de participantes atingido",weight=ft.FontWeight.BOLD,size=15),
                 on_dismiss=lambda e: page.close(dlg),
                 )
             page.open(dlg)
@@ -203,8 +338,6 @@ def main(page: ft.Page):
                 for i,item in enumerate(response.json()):
                     global item_lista
                     item_lista = item
-                    global tentativa
-                    tentativa = item['quando']
                     global total_participantes
                     total_participantes = requests.get(f"{link}/lista/ativa/totalparticipantes/",data={"lista_relacionada":item['quando']})
                     page.add(
@@ -214,13 +347,14 @@ def main(page: ft.Page):
                                     [
                                         ft.ListTile(
                                             leading=ft.Icon(ft.icons.LIST),
-                                            title=ft.Text(f"Data: {item['quando']}"),
+                                            title=ft.Text(f"Data: {item['quando']}",weight=ft.FontWeight.BOLD,size=15),
                                             subtitle=ft.Text(
-                                            f"""Local: {item['local']}
-                                Participantes: {total_participantes.json()['total']}
-                                Máximo: {item['qtd_participantes']}"""
+                                            f"""Local: {item['local']}\n
+                                                            Participantes: {total_participantes.json()['total']}\n
+                                                            Máximo: {item['qtd_participantes']}
+                                """
                                             
-                                            ,text_align=ft.alignment.center),
+                                            ,text_align=ft.alignment.center,weight=ft.FontWeight.BOLD,size=15),
                                         ),
                                         ft.Row(
                                             [ft.IconButton(ft.icons.OPEN_IN_NEW,on_click=participar_lista), ft.IconButton(ft.icons.CLOSE,on_click=retirar_nome),ft.IconButton(icon=ft.Icons.PERSON,on_click=ver_participantes),ft.IconButton(icon=ft.Icons.EDIT,on_click=alterar_lista_dialog),ft.IconButton(icon=ft.Icons.DELETE,on_click=apagar_lista_dialog)],
@@ -294,9 +428,12 @@ def main(page: ft.Page):
             content=ft.Text(
                 value=f"Sucesso uma nova lista foi criada para a data {quando} com {qtd_participantes} participantes",
                 color=ft.Colors.BLACK,
+                font_family='monospace',
+                weight=ft.FontWeight.BOLD,
+                size=20
             ),
             actions=[   
-                ft.TextButton(text="ok", style=action_button_style, on_click=close_banner),
+                ft.TextButton(text="ok",color=ft.colors.BLACK, on_click=close_banner),
             ],
         ) 
             page.open(banner)
@@ -308,9 +445,10 @@ def main(page: ft.Page):
             content=ft.Text(
                 value=f"Já existe uma lista criada para essa data {quando}",
                 color=ft.Colors.BLACK,
+                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
             ),
             actions=[   
-                ft.TextButton(text="ok", style=action_button_style, on_click=close_banner),
+                ft.TextButton(text="ok",color=ft.colors.BLACK, on_click=close_banner),
             ],
         ) 
             page.open(banner)
@@ -322,9 +460,10 @@ def main(page: ft.Page):
             content=ft.Text(
                 value=f"Houve um erro na criação da lista",
                 color=ft.Colors.BLACK,
+                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
             ),
             actions=[   
-                ft.TextButton(text="ok", style=action_button_style, on_click=close_banner),
+                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=close_banner),
             ],
         ) 
             page.open(banner)
@@ -343,16 +482,16 @@ def main(page: ft.Page):
                         content=ft.Column(
                             alignment=ft.alignment.center,
                             controls=[
-                            ft.Text('Selecione uma data'),
+                            ft.Text(f"Selecione uma Data",font_family='monospace',weight=ft.FontWeight.BOLD,size=20),
                             calendario,
                             ft.Divider(),
-                            ft.Text("Selecione a quantidade de pessoas"),
+                            ft.Text("Selecione a quantidade de pessoas",font_family='monospace',weight=ft.FontWeight.BOLD,size=20),
                             quantidade,
                             ft.Divider(),
-                            ft.Text("Selecione o local"),
+                            ft.Text("Selecione o local",font_family='monospace',weight=ft.FontWeight.BOLD,size=20),
                             text_local,
                             ft.Divider(),
-                            ft.FloatingActionButton("Criar",width=50,on_click=criar_listas),
+                            ft.FloatingActionButton("Criar",on_click=criar_listas,icon=ft.icons.NEW_RELEASES_ROUNDED),
                             ]
                         ),padding=15,
                         
@@ -367,7 +506,11 @@ def main(page: ft.Page):
                 lista_ativa = True
             else:
                  pass
-
+    def voltar_ao_inicio(e):
+        page.clean()
+        page.bottom_appbar = None
+        page.floating_action_button = None
+        voltar(e)
 
     def logar(e):
         response = requests.post(f'{link}/usuario/acesso/',data={'nome_site':login.value,'nome':login.value,'senha':int(str(senha.value))})
@@ -383,7 +526,8 @@ def main(page: ft.Page):
                         controls=[
                             ft.IconButton(icon=ft.Icons.SEARCH, icon_color=ft.Colors.WHITE,on_click=listas_ativas),
                             ft.Container(expand=True),
-                            ft.IconButton(icon=ft.Icons.ACCOUNT_BOX, icon_color=ft.Colors.WHITE),
+                            ft.IconButton(icon=ft.Icons.LOGIN_ROUNDED, icon_color=ft.Colors.WHITE,on_click=voltar_ao_inicio),
+                            ft.IconButton(icon=ft.Icons.PERSON, icon_color=ft.Colors.WHITE,on_click=page_alterar_perfil),
                         ]
                     ),
                 )
@@ -465,13 +609,17 @@ def main(page: ft.Page):
                         element
                     ),
                 )
-    quantidade = ft.Slider(min=0, max=100, divisions=12, label="{value}")
-    text_local = ft.TextField(label='Insira um local')
+    quantidade = ft.Slider(min=0, max=100, divisions=100, label="{value}")
+    text_local = ft.TextField(label='Insira um local',label_style=ft.TextStyle(color=ft.colors.WHITE), 
+            text_style=ft.TextStyle(color=ft.colors.WHITE), 
+            border_color=ft.colors.WHITE,
+            icon=ft.icons.PLACE)
     login = ft.TextField(
             label="Insira seu usuário",
             label_style=ft.TextStyle(color=ft.colors.WHITE), 
             text_style=ft.TextStyle(color=ft.colors.WHITE), 
             border_color=ft.colors.WHITE,
+            icon=ft.icons.PERSON
         
             )
     senha = ft.TextField(
@@ -480,20 +628,21 @@ def main(page: ft.Page):
             label_style=ft.TextStyle(color=ft.colors.WHITE), 
             text_style=ft.TextStyle(color=ft.colors.WHITE), 
             border_color=ft.colors.WHITE,
+            icon=ft.icons.PASSWORD
             )
     container_login = ft.Container(
-            padding=10,
+            padding=20,
+            width=350,
+            height=350,
             border_radius=ft.border_radius.all(15),
-            width=500, 
-            height=500,
-            bgcolor=ft.colors.LIGHT_BLUE_500,
+            bgcolor=ft.colors.LIGHT_BLUE,
             content=ft.Column(
-                controls=[ft.Text("Seja bem vindo ao App de Lista",size=15,color=ft.colors.WHITE,text_align=ft.MainAxisAlignment.CENTER),login,senha,
+                controls=[ft.Text("Seja bem vindo ao App de Lista",color=ft.colors.WHITE,text_align=ft.alignment.center,weight=ft.FontWeight.BOLD,size=15),login,senha,
                     ft.Row(
                     alignment=ft.MainAxisAlignment.CENTER,
                     controls=[
-                        ft.FloatingActionButton("Acessar",width=100,on_click=logar),
-                        ft.FloatingActionButton("Criar Usuário",width=100,on_click=page_cadastro)
+                        ft.FloatingActionButton("Acessar",on_click=logar,icon=ft.icons.ASSIGNMENT),
+                        ft.FloatingActionButton("Criar Usuário",on_click=page_cadastro,icon=ft.icons.APP_REGISTRATION)
                     ]
                 )
                 ],
@@ -506,6 +655,7 @@ def main(page: ft.Page):
             label_style=ft.TextStyle(color=ft.colors.WHITE), 
             text_style=ft.TextStyle(color=ft.colors.WHITE), 
             border_color=ft.colors.WHITE,
+            icon=ft.icons.PERSON
         
             )
     nova_senha = ft.TextField(
@@ -514,26 +664,28 @@ def main(page: ft.Page):
                 label_style=ft.TextStyle(color=ft.colors.WHITE), 
                 text_style=ft.TextStyle(color=ft.colors.WHITE), 
                 border_color=ft.colors.WHITE,
+                icon=ft.icons.PASSWORD
                 )
     novo_container_login = ft.Container(
-                padding=10,
+                padding=20,
                 border_radius=ft.border_radius.all(15),
-                width=500, 
-                height=500,
-                bgcolor=ft.colors.LIGHT_BLUE_500,
+                bgcolor=ft.colors.LIGHT_BLUE,
+                width=350,
+                height=350,
                 content=ft.Column(
-                    controls=[ft.Text("Crie aqui seu usuário",size=15,color=ft.colors.WHITE,text_align=ft.MainAxisAlignment.CENTER),novo_login,nova_senha,
+                    controls=[ft.Text("Crie aqui seu usuário",color=ft.colors.WHITE,text_align=ft.alignment.center,weight=ft.FontWeight.BOLD,size=20),novo_login,nova_senha,
                         ft.Row(
                         alignment=ft.MainAxisAlignment.CENTER,
                         controls=[
-                            ft.FloatingActionButton("Criar e Entrar",width=100,on_click=criar_usuario),
-                            ft.FloatingActionButton("voltar ao login",width=100,on_click=voltar)
+                            ft.FloatingActionButton("Criar",on_click=criar_usuario,icon=ft.icons.ACCOUNT_BOX_ROUNDED),
+                            ft.FloatingActionButton("voltar ao login",on_click=voltar,icon=ft.icons.TURN_LEFT_OUTLINED)
                         ]
                     )
                     ],
                     alignment=ft.MainAxisAlignment.CENTER
                     )
                 )
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.add(
         ft.SafeArea(
             ft.Container(
