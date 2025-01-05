@@ -212,7 +212,7 @@ def main(page: ft.Page):
             page.update()   
     def apagar_lista(e):
         if senha_cancelamento.value == '1020':
-            response = requests.delete(f"{link}//new/lista/",data={"lista_relacionada":f'{str(item_lista['quando'])}'}) 
+            response = requests.delete(f"{link}//new/lista/",data={"lista_relacionada":f'{str(var_quando)}'}) 
             if response.status_code == 200:
                 banner_cancelamento = ft.Banner(
                     bgcolor=ft.Colors.GREEN,
@@ -340,6 +340,8 @@ def main(page: ft.Page):
                     item_lista = item
                     global total_participantes
                     total_participantes = requests.get(f"{link}/lista/ativa/totalparticipantes/",data={"lista_relacionada":item['quando']})
+                    global var_quando
+                    var_quando = item['quando']
                     page.add(
                         ft.Card(
                             content=ft.Container(
