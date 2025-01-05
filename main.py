@@ -5,6 +5,75 @@ import datetime
 def main(page: ft.Page):
     page.bgcolor = ft.colors.BLACK
     link = 'https://api-production-0138.up.railway.app/'
+    def zerar_placar(e):
+        global placar_timea
+        global placar_timeb
+        placar_timea.value = 0
+        placar_timeb.value = 0
+        page.update()
+    def aumentar_placar_timea(e):
+        global placar_timea
+        placar_timea.value +=1
+        page.update()
+    def aumentar_placar_timeb(e):
+        global placar_timeb
+        placar_timeb.value +=1
+        page.update()
+    def diminuir_placar_timea(e):
+        global placar_timea
+        placar_timea.value -=1
+        page.update()
+    def diminuir_placar_timeb(e):
+        global placar_timeb
+        placar_timeb.value -=1
+        page.update()
+    def page_placar(e):
+        global placar_timea
+        placar_timea = ft.Text(size=80,value=0)
+        global placar_timeb
+        placar_timeb = ft.Text(size=80,value=0)
+        page.clean()
+        page.add(
+            ft.Row(
+                controls=[
+                    ft.FloatingActionButton(icon=ft.icons.LOGIN_OUTLINED,on_click=voltar),
+                    ft.FloatingActionButton(icon=ft.icons.CLEAR_ROUNDED,on_click=zerar_placar),
+                ]
+            ),
+            ft.Container(
+                
+                ft.Column(
+                    controls=[
+                        ft.Text("Time A",size=20,font_family='monospace',weight=ft.FontWeight.BOLD,color=ft.colors.LIGHT_BLUE),
+                        ft.Container(bgcolor=ft.colors.BLUE,padding=20,content=placar_timea,border_radius=15),
+                        ft.Row(
+                            controls=[
+                                ft.FloatingActionButton(icon=ft.icons.ADD,bgcolor=ft.colors.GREEN,on_click=aumentar_placar_timea),
+                                ft.FloatingActionButton('-',bgcolor=ft.colors.RED,on_click=diminuir_placar_timea)
+                            ]
+                        )
+                    ]
+                )
+                ,alignment=ft.alignment.center,padding=2
+            ),
+            ft.Divider(),
+            ft.Container(
+                
+                ft.Column(
+                    controls=[
+                        ft.Text("Time B",font_family='monospace',weight=ft.FontWeight.BOLD,color=ft.colors.RED,size=20),
+                        ft.Container(bgcolor=ft.colors.RED,padding=20,content=placar_timeb,border_radius=15),
+                        ft.Row(
+                            controls=[
+                                ft.FloatingActionButton(icon=ft.icons.ADD,bgcolor=ft.colors.GREEN,on_click=aumentar_placar_timeb),
+                                ft.FloatingActionButton('-',bgcolor=ft.colors.BLUE,on_click=diminuir_placar_timeb)
+                            ]
+                        )
+                    ]
+                ),
+                alignment=ft.alignment.center,padding=2
+            )
+        )
     def apagar_perfil(e):
         if int(senha_apagar_perfil.value) == int(senha.value):
             response = requests.delete(f'{link}/usuario/manipular/{login.value}/')
@@ -566,6 +635,7 @@ def main(page: ft.Page):
     def voltar(e):
         page.clean()
         page.add(
+        ft.FloatingActionButton(icon=ft.icons.SCOREBOARD,bgcolor=ft.colors.BLUE,on_click=page_placar),    
         ft.SafeArea(
             ft.Container(
                 container_login,
@@ -689,6 +759,7 @@ def main(page: ft.Page):
                 )
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.add(
+        ft.FloatingActionButton(icon=ft.icons.SCOREBOARD,bgcolor=ft.colors.BLUE,on_click=page_placar),
         ft.SafeArea(
             ft.Container(
                 container_login,
