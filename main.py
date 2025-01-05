@@ -613,23 +613,35 @@ def main(page: ft.Page):
     def criar_usuario(e):
         response = requests.post(f'{link}/usuario/criacao/',data={'nome_site':novo_login.value,'nome':novo_login.value,'senha':int(str(nova_senha.value))})
         if response.status_code == 200:
-            page.clean()
-            page.add(
-                 ft.Text("criado",color=ft.colors.BLUE),
-                 ft.Container(
-                container_login,
-                alignment=ft.alignment.center,
+            banner = ft.Banner(
+            bgcolor=ft.Colors.GREEN,
+            leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+            content=ft.Text(
+                value=f"Sucesso O novo usuário foi criado",
+                color=ft.Colors.BLACK,
+                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
             ),
-            expand=True,
-            )
-           
-
+            actions=[   
+                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=close_banner),
+            ],
+        ) 
+            page.open(banner)
             page.update()
+            voltar()
         else:
-            
-            page.add(
-                ft.Text(f"{response}")
-            )
+            banner = ft.Banner(
+            bgcolor=ft.Colors.RED,
+            leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+            content=ft.Text(
+                value=f"Erro ao criar um usuário",
+                color=ft.Colors.BLACK,
+                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
+            ),
+            actions=[   
+                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=close_banner),
+            ],
+        ) 
+            page.open(banner)
             page.update()
     
     def voltar(e):
