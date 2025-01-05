@@ -617,7 +617,7 @@ def main(page: ft.Page):
                 ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=lambda e:page.close(banner_erro_logar_usuario)),
             ],
         ) 
-            page.open(banner_erro_logar_usuario)
+            page.banner = banner_erro_logar_usuario
             page.update()
                 
         
@@ -637,7 +637,7 @@ def main(page: ft.Page):
                 ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=lambda e:page.close(banner_criar_usuario)),
             ],
         ) 
-            page.open(banner_criar_usuario)
+            page.banner = banner_criar_usuario
             page.update()
             
         else:
@@ -653,7 +653,7 @@ def main(page: ft.Page):
                 ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=lambda e:page.close(banner_criar_usuario)),
             ],
         ) 
-            page.open(banner_criar_usuario)
+            page.banner = banner_criar_usuario
             page.update()
     
     def voltar(e):
