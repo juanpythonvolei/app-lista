@@ -585,76 +585,109 @@ def main(page: ft.Page):
 
     def logar(e):
         response = requests.post(f'{link}/usuario/acesso/',data={'nome_site':login.value,'nome':login.value,'senha':int(str(senha.value))})
-        if response.status_code == 200:
-                page.clean()
-                page.floating_action_button = ft.FloatingActionButton(icon=ft.Icons.ADD,on_click=pagina_criar_lista)
-                page.floating_action_button_location = ft.FloatingActionButtonLocation.CENTER_DOCKED
-                global barra_navegacao
-                barra_navegacao = ft.BottomAppBar(
-                    bgcolor=ft.Colors.BLUE,
-                    shape=ft.NotchShape.CIRCULAR,
-                    content=ft.Row(
-                        controls=[
-                            ft.IconButton(icon=ft.Icons.SEARCH, icon_color=ft.Colors.WHITE,on_click=listas_ativas),
-                            ft.Container(expand=True),
-                            ft.IconButton(icon=ft.Icons.LOGIN_ROUNDED, icon_color=ft.Colors.WHITE,on_click=voltar_ao_inicio),
-                            ft.IconButton(icon=ft.Icons.PERSON, icon_color=ft.Colors.WHITE,on_click=page_alterar_perfil),
-                        ]
-                    ),
-                )
-                page.bottom_appbar = barra_navegacao
+        if login.value != '' and senha.value != '':
+            if response.status_code == 200:
+                    page.clean()
+                    page.floating_action_button = ft.FloatingActionButton(icon=ft.Icons.ADD,on_click=pagina_criar_lista)
+                    page.floating_action_button_location = ft.FloatingActionButtonLocation.CENTER_DOCKED
+                    global barra_navegacao
+                    barra_navegacao = ft.BottomAppBar(
+                        bgcolor=ft.Colors.BLUE,
+                        shape=ft.NotchShape.CIRCULAR,
+                        content=ft.Row(
+                            controls=[
+                                ft.IconButton(icon=ft.Icons.SEARCH, icon_color=ft.Colors.WHITE,on_click=listas_ativas),
+                                ft.Container(expand=True),
+                                ft.IconButton(icon=ft.Icons.LOGIN_ROUNDED, icon_color=ft.Colors.WHITE,on_click=voltar_ao_inicio),
+                                ft.IconButton(icon=ft.Icons.PERSON, icon_color=ft.Colors.WHITE,on_click=page_alterar_perfil),
+                            ]
+                        ),
+                    )
+                    page.bottom_appbar = barra_navegacao
+                    page.update()
+            else:
+                banner_erro_logar_usuario = ft.Banner(
+                bgcolor=ft.Colors.RED,
+                leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+                content=ft.Text(
+                    value=f"Erro. Usuário ou senha incorretos",
+                    color=ft.Colors.BLACK,
+                    font_family='monospace',weight=ft.FontWeight.BOLD,size=20
+                ),
+                actions=[   
+                    ft.TextButton(text="ok",on_click=lambda e:page.close(banner_erro_logar_usuario)),
+                ],
+            ) 
+                page.banner = banner_erro_logar_usuario
                 page.update()
         else:
-            banner_erro_logar_usuario = ft.Banner(
-            bgcolor=ft.Colors.RED,
-            leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
-            content=ft.Text(
-                value=f"Erro. Usuário ou senha incorretos",
-                color=ft.Colors.BLACK,
-                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
-            ),
-            actions=[   
-                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=lambda e:page.close(banner_erro_logar_usuario)),
-            ],
-        ) 
-            page.banner = banner_erro_logar_usuario
-            page.update()
+                banner_erro_logar_usuario = ft.Banner(
+                bgcolor=ft.Colors.RED,
+                leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+                content=ft.Text(
+                    value=f"Erro. Informações ausentes",
+                    color=ft.Colors.BLACK,
+                    font_family='monospace',weight=ft.FontWeight.BOLD,size=20
+                ),
+                actions=[   
+                    ft.TextButton(text="ok",on_click=lambda e:page.close(banner_erro_logar_usuario)),
+                ],
+            ) 
+                page.banner = banner_erro_logar_usuario
+                page.update()
                 
         
     def criar_usuario(e):
         response = requests.post(f'{link}/usuario/criacao/',data={'nome_site':novo_login.value,'nome':novo_login.value,'senha':int(str(nova_senha.value))})
-        if response.status_code == 200:
-            voltar()
-            banner_criar_usuario = ft.Banner(
-            bgcolor=ft.Colors.GREEN,
-            leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
-            content=ft.Text(
-                value=f"Sucesso O novo usuário foi criado",
-                color=ft.Colors.BLACK,
-                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
-            ),
-            actions=[   
-                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=lambda e:page.close(banner_criar_usuario)),
-            ],
-        ) 
-            page.banner = banner_criar_usuario
-            page.update()
-            
+        if novo_login.value != '' and nova_senha != '':
+            if response.status_code == 200:
+                voltar()
+                banner_criar_usuario = ft.Banner(
+                bgcolor=ft.Colors.GREEN,
+                leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+                content=ft.Text(
+                    value=f"Sucesso O novo usuário foi criado",
+                    color=ft.Colors.BLACK,
+                    font_family='monospace',weight=ft.FontWeight.BOLD,size=20
+                ),
+                actions=[   
+                    ft.TextButton(text="ok",on_click=lambda e:page.close(banner_criar_usuario)),
+                ],
+            ) 
+                page.banner = banner_criar_usuario
+                page.update()
+                
+            else:
+                banner_criar_usuario = ft.Banner(
+                bgcolor=ft.Colors.RED,
+                leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+                content=ft.Text(
+                    value=f"Erro ao criar um usuário",
+                    color=ft.Colors.BLACK,
+                    font_family='monospace',weight=ft.FontWeight.BOLD,size=20
+                ),
+                actions=[   
+                    ft.TextButton(text="ok",on_click=lambda e:page.close(banner_criar_usuario)),
+                ],
+            ) 
+                page.banner = banner_criar_usuario
+                page.update()
         else:
-            banner = ft.Banner(
-            bgcolor=ft.Colors.RED,
-            leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
-            content=ft.Text(
-                value=f"Erro ao criar um usuário",
-                color=ft.Colors.BLACK,
-                font_family='monospace',weight=ft.FontWeight.BOLD,size=20
-            ),
-            actions=[   
-                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=lambda e:page.close(banner_criar_usuario)),
-            ],
-        ) 
-            page.banner = banner_criar_usuario
-            page.update()
+                banner_criar_usuario = ft.Banner(
+                bgcolor=ft.Colors.RED,
+                leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
+                content=ft.Text(
+                    value=f"Erro Informações ausentes",
+                    color=ft.Colors.BLACK,
+                    font_family='monospace',weight=ft.FontWeight.BOLD,size=20
+                ),
+                actions=[   
+                    ft.TextButton(text="ok",on_click=lambda e:page.close(banner_criar_usuario)),
+                ],
+            ) 
+                page.banner = banner_criar_usuario
+                page.update()
+    
     
     def voltar(e):
         page.clean()
