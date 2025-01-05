@@ -86,7 +86,7 @@ def main(page: ft.Page):
                             color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
                         ),
                         actions=[
-                            ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                            ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_alteracao_perfil)),
                         ],
                     )
                     page.open(banner_alteracao_perfil)
@@ -101,7 +101,7 @@ def main(page: ft.Page):
                             color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
                         ),
                         actions=[
-                            ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                            ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_alteracao_perfil)),
                         ],
                     )
                     page.open(banner_alteracao_perfil)
@@ -116,7 +116,7 @@ def main(page: ft.Page):
                             weight=ft.FontWeight.BOLD,size=20
                         ),
                         actions=[
-                            ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                            ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_alteracao_perfil)),
                         ],
                     )
                     page.open(banner_alteracao_perfil)
@@ -158,7 +158,7 @@ def main(page: ft.Page):
                         color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
                     ),
                     actions=[
-                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                        ft.TextButton(text="fechar", on_click=lambda e:page.close(banner_alteracao_perfil)),
                     ],
                 )
                 page.open(banner_alteracao_perfil)
@@ -172,7 +172,7 @@ def main(page: ft.Page):
                         color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=20
                     ),
                     actions=[
-                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao_perfil)),
+                        ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_alteracao_perfil)),
                     ],
                 )
                 page.open(banner_alteracao_perfil)
@@ -218,7 +218,7 @@ def main(page: ft.Page):
                         color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao)),
+                        ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_alteracao)),
                     ],
                 )
                 page.open(banner_alteracao)
@@ -232,7 +232,7 @@ def main(page: ft.Page):
                         color=ft.Colors.BLACK,weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_alteracao)),
+                        ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_alteracao)),
                     ],
                 )
                 page.open(banner_alteracao)
@@ -292,7 +292,7 @@ def main(page: ft.Page):
                         weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_cancelamento)),
+                        ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_cancelamento)),
                     ],
                 )
                 page.open(banner_cancelamento)
@@ -307,7 +307,7 @@ def main(page: ft.Page):
                         weight=ft.FontWeight.BOLD,size=15
                     ),
                     actions=[
-                        ft.TextButton(text="fechar",color=ft.colors.BLACK, on_click=lambda e:page.close(banner_cancelamento)),
+                        ft.TextButton(text="fechar",on_click=lambda e:page.close(banner_cancelamento)),
                     ],
                 )
                  page.open(banner_cancelamento)
@@ -504,7 +504,7 @@ def main(page: ft.Page):
                 size=20
             ),
             actions=[   
-                ft.TextButton(text="ok",color=ft.colors.BLACK, on_click=close_banner),
+                ft.TextButton(text="ok",on_click=close_banner),
             ],
         ) 
             page.open(banner)
@@ -514,12 +514,12 @@ def main(page: ft.Page):
             bgcolor=ft.Colors.AMBER,
             leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLUE, size=40),
             content=ft.Text(
-                value=f"Já existe uma lista criada para essa data {quando}",
+                value=f"Já existe uma lista criada. Apague-a Para Continuar",
                 color=ft.Colors.BLACK,
                 font_family='monospace',weight=ft.FontWeight.BOLD,size=20
             ),
             actions=[   
-                ft.TextButton(text="ok",color=ft.colors.BLACK, on_click=close_banner),
+                ft.TextButton(text="ok",on_click=close_banner),
             ],
         ) 
             page.open(banner)
@@ -534,7 +534,7 @@ def main(page: ft.Page):
                 font_family='monospace',weight=ft.FontWeight.BOLD,size=20
             ),
             actions=[   
-                ft.TextButton(text="ok",color=ft.colors.BLACK,on_click=close_banner),
+                ft.TextButton(text="ok",on_click=close_banner),
             ],
         ) 
             page.open(banner)
@@ -584,8 +584,9 @@ def main(page: ft.Page):
         voltar(e)
 
     def logar(e):
-        response = requests.post(f'{link}/usuario/acesso/',data={'nome_site':login.value,'nome':login.value,'senha':int(str(senha.value))})
+        
         if login.value != '' and senha.value != '':
+            response = requests.post(f'{link}/usuario/acesso/',data={'nome_site':login.value,'nome':login.value,'senha':int(str(senha.value))})
             if response.status_code == 200:
                     page.clean()
                     page.floating_action_button = ft.FloatingActionButton(icon=ft.Icons.ADD,on_click=pagina_criar_lista)
@@ -618,7 +619,7 @@ def main(page: ft.Page):
                     ft.TextButton(text="ok",on_click=lambda e:page.close(banner_erro_logar_usuario)),
                 ],
             ) 
-                page.banner = banner_erro_logar_usuario
+                page.open(banner_erro_logar_usuario)
                 page.update()
         else:
                 banner_erro_logar_usuario = ft.Banner(
@@ -633,13 +634,14 @@ def main(page: ft.Page):
                     ft.TextButton(text="ok",on_click=lambda e:page.close(banner_erro_logar_usuario)),
                 ],
             ) 
-                page.banner = banner_erro_logar_usuario
+                page.open(banner_erro_logar_usuario)
                 page.update()
                 
         
     def criar_usuario(e):
-        response = requests.post(f'{link}/usuario/criacao/',data={'nome_site':novo_login.value,'nome':novo_login.value,'senha':int(str(nova_senha.value))})
+        
         if novo_login.value != '' and nova_senha != '':
+            response = requests.post(f'{link}/usuario/criacao/',data={'nome_site':novo_login.value,'nome':novo_login.value,'senha':int(str(nova_senha.value))})
             if response.status_code == 200:
                 voltar()
                 banner_criar_usuario = ft.Banner(
@@ -654,7 +656,7 @@ def main(page: ft.Page):
                     ft.TextButton(text="ok",on_click=lambda e:page.close(banner_criar_usuario)),
                 ],
             ) 
-                page.banner = banner_criar_usuario
+                page.open(banner_criar_usuario)
                 page.update()
                 
             else:
@@ -670,7 +672,7 @@ def main(page: ft.Page):
                     ft.TextButton(text="ok",on_click=lambda e:page.close(banner_criar_usuario)),
                 ],
             ) 
-                page.banner = banner_criar_usuario
+                page.open(banner_criar_usuario)
                 page.update()
         else:
                 banner_criar_usuario = ft.Banner(
@@ -685,9 +687,8 @@ def main(page: ft.Page):
                     ft.TextButton(text="ok",on_click=lambda e:page.close(banner_criar_usuario)),
                 ],
             ) 
-                page.banner = banner_criar_usuario
+                page.open(banner_criar_usuario)
                 page.update()
-    
     
     def voltar(e):
         page.clean()
