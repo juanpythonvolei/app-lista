@@ -497,7 +497,7 @@ def main(page: ft.Page):
             bgcolor=ft.Colors.LIGHT_GREEN,
             leading=ft.Icon(ft.Icons.WARNING_AMBER_ROUNDED, color=ft.Colors.BLACK, size=40),
             content=ft.Text(
-                value=f"Sucesso uma nova lista foi criada para a data {quando} com {qtd_participantes} participantes",
+                value=f"Sucesso uma nova lista foi criada para a data {quando.value} com {qtd_participantes} participantes",
                 color=ft.Colors.BLACK,
                 font_family='monospace',
                 weight=ft.FontWeight.BOLD,
